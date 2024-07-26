@@ -1,4 +1,4 @@
-import { Controller, Route, UploadedFile, Post, FormField } from "tsoa";
+import { Controller, Route, UploadedFile, Post, FormField, Put } from "tsoa";
 import { S3Service } from "../services/s3-service";
 import { UserRequest } from "../services/s3-type";
 // import { UserRequest } from "../services/s3-type";

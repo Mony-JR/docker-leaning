@@ -16,4 +16,22 @@ export class s3Repo {
     //     return newUser.save();
     // }
 
+
+    public async updateUpload(id: string, updatedUserData: UserRequest): Promise<UserRequest | null> {
+        try {
+            const user = await UserModel.findById(id);
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            user.file = updatedUserData.file;
+
+            const updatedUser = await user.save();
+            return updatedUser;
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw new Error('Error updating user.');
+        }
+    }
+
 }

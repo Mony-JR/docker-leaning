@@ -45,4 +45,35 @@ export class S3Service {
             throw new Error('Error uploading to S3.');
         }
     }
+
+    public async updateUpload(id: string, file: Express.Multer.File, name: string, email: string): Promise<UserRequest | null> {
+        const fileName = Date.now().toString() + "_" + file.originalname;
+        const params = {
+            Bucket: "my-testing-monny",
+            Key: fileName,
+            Body: file.buffer,
+            ContentType: file.mimetype // Use the actual MIME type
+        };
+
+        try {
+            await s3.send(new PutObjectCommand(params));
+            const fileUrl = `https://my-testing-monny.s3.amazonaws.com/${fileName}`;
+
+            const updatedUserData: UserRequest = {
+                name: name,
+                email: email,
+                file: fileUrl
+            };
+
+            console.log(`Updating user with ID: ${id}`);
+            console.log(name);
+            console.log(email);
+            console.log(fileUrl);
+
+            return this.s3_send.updateUpload(id, updatedUserData);
+        } catch (error) {
+            console.error('Error updating file in S3:', error);
+            throw new Error('Error updating file in S3.');
+        }
+    }
 }

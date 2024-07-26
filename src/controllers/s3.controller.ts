@@ -1,4 +1,4 @@
-import { Controller, Route, UploadedFile, Post, FormField, Put } from "tsoa";
+import { Controller, Route, UploadedFile, Post, FormField, Put, Path } from "tsoa";
 import { S3Service } from "../services/s3-service";
 import { UserRequest } from "../services/s3-type";
 // import { UserRequest } from "../services/s3-type";
@@ -20,6 +20,21 @@ export class UploadController extends Controller {
         } catch (err) {
             console.error('Error uploading file:', err);
             throw new Error('Error uploading file.');
+        }
+    }
+    @Put("/{id}")
+    public async updateFile(
+        @Path('id') id: string,
+        @UploadedFile() file: Express.Multer.File,
+        @FormField() name: string,
+        @FormField() email: string,
+    ): Promise<UserRequest|null> {
+        try {
+            const user = await this.s3Service.updateUpload(id, file, name, email);
+            return user;
+        } catch (err) {
+            console.error('Error updating file:', err);
+            throw new Error('Error updating file.');
         }
     }
 }

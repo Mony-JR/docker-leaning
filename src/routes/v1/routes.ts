@@ -280,6 +280,40 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/v2/upload/:id',
+            upload.fields([{"name":"file","maxCount":1,"multiple":false}]),
+            ...(fetchMiddlewares<RequestHandler>(UploadController)),
+            ...(fetchMiddlewares<RequestHandler>(UploadController.prototype.updateFile)),
+
+            async function UploadController_updateFile(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                    file: {"in":"formData","name":"file","required":true,"dataType":"file"},
+                    name: {"in":"formData","name":"name","required":true,"dataType":"string"},
+                    email: {"in":"formData","name":"email","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UploadController();
+
+              await templateService.apiHandler({
+                methodName: 'updateFile',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 

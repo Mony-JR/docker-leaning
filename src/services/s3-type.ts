@@ -20,5 +20,7 @@ export interface UserRequest {
     name?: string;
     email?: string;
     file?: string; // URL of the uploaded file
+    message?:string;
+    success?: boolean;
 }
 

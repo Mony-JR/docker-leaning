@@ -81,7 +81,7 @@ export class S3Service {
     }
 
     
-    public async deleteUpload(id: string): Promise<any> {
+    public async deleteUpload(id: string): Promise<UserRequest|null> {
         console.log(`Finding user with ID: ${id}`); // Log the ID
 
         try {
@@ -109,10 +109,13 @@ export class S3Service {
             await s3.send( new DeleteObjectCommand(params));
             console.log('File deleted from S3 successfully');
 
+            const updatedUserData: UserRequest = {
+                name: user.name,
+                email: user.email,
+                file: ""
+            }
 
-            user.file =undefined
-            const Nullfile=await user.save();
-            return Nullfile
+            return UserModel.findByIdAndUpdate(id, updatedUserData, { new: true }).exec();
 
             
         } catch (error) {

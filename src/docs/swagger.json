@@ -37,6 +37,12 @@
 					},
 					"file": {
 						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"success": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",

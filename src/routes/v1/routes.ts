@@ -31,6 +31,8 @@ const models: TsoaRoute.Models = {
             "name": {"dataType":"string"},
             "email": {"dataType":"string"},
             "file": {"dataType":"string"},
+            "message": {"dataType":"string"},
+            "success": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },

@@ -37,4 +37,19 @@ export class UploadController extends Controller {
             throw new Error('Error updating file.');
         }
     }
+
+    @Put('update/{id}')
+    public async delelteFile(
+        @Path('id') id:string,
+    ):Promise<UserRequest |null>{
+        try {
+            const user = await this.s3Service.deleteUpload(id);
+            return user;
+        } catch (err) {
+            console.error('Error deleting file:', err);
+            throw new Error('Error deleting file.');
+        }
+    }
+
+
 }

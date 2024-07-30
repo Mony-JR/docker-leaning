@@ -1,7 +1,9 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {  DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { s3Repo } from '../user Repo/s3.repo';
 import { UserRequest } from './s3-type';
 import config from '../config';
+import { UserModel } from '../Models/user';
+
 
 
 const s3 = new S3Client({
@@ -13,9 +15,10 @@ const s3 = new S3Client({
 });
 
 export class S3Service {
-    private s3_send = new s3Repo();    
-    
-    public async createUpload(file: Express.Multer.File, name:string,email:string): Promise<UserRequest|null>  {
+
+    private s3_send = new s3Repo();
+
+    public async createUpload(file: Express.Multer.File, name: string, email: string): Promise<UserRequest | null> {
         const fileName = Date.now().toString() + "_" + file.originalname;
         const params = {
             Bucket: "my-testing-monny",
@@ -38,8 +41,8 @@ export class S3Service {
             console.log(fileUrl);
             return this.s3_send.createUpload(userData);
 
-            
-            
+
+
         } catch (error) {
             console.error('Error uploading to S3:', error);
             throw new Error('Error uploading to S3.');
@@ -76,4 +79,47 @@ export class S3Service {
             throw new Error('Error updating file in S3.');
         }
     }
+
+    
+    public async deleteUpload(id: string): Promise<any> {
+        console.log(`Finding user with ID: ${id}`); // Log the ID
+
+        try {
+            const user = await UserModel.findById(id);
+            if (!user) {
+                console.log('User not found');
+                return { success: false, message: 'User not found' };
+            }
+            const fileName = user.file;
+            if (!fileName) {
+                console.log('No file to delete');
+                return { success: false, message: 'No file found for deletion' };
+            }
+    
+            const splitURL = fileName.split('/');
+            const getnewName = splitURL[splitURL.length - 1];
+            console.log('User file name:', getnewName);
+    
+    
+            const params = {
+                Bucket: 'my-testing-monny', // Replace with your bucket name
+                Key: getnewName
+            };
+    
+            await s3.send( new DeleteObjectCommand(params));
+            console.log('File deleted from S3 successfully');
+
+
+            user.file =undefined
+            const Nullfile=await user.save();
+            return Nullfile
+
+            
+        } catch (error) {
+            console.error('Error updating user name:', error);
+            return { success: false, message: 'Error updating user name' };
+        }
+    }
+
+
 }

@@ -97,7 +97,7 @@ export class S3Service {
             }
     
             const splitURL = fileName.split('/');
-            const getnewName = splitURL[splitURL.length - 1];
+            const getnewName = splitURL[3];
             console.log('User file name:', getnewName);
     
     
